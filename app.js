@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
     res.send(`
         ${html}
             <h1>Lista de usuarios</h1>
+            <b>Presiona el usuario para editarlo o eliminarlo</b>
             <ul>
                 ${usuarios.map(user => `<li><a href="/usuarios/${user.nombre}">Nombre: ${user.nombre} | Edad: ${user.edad} | Procedencia: ${user.lugarProcedencia}</a></li>`).join('')}
             </ul>
@@ -48,6 +49,7 @@ app.get('/usuarios', (req, res) => {
 app.post('/usuarios', (req, res) => {
     const newUser = {
         id: usuarios[usuarios.length-1].id + 1,
+        //...req.body
         nombre: req.body.name,
         edad: req.body.age,
         lugarProcedencia: req.body.origin
@@ -58,9 +60,7 @@ app.post('/usuarios', (req, res) => {
 
 app.route('/usuarios/:nombre')
     .get((req, res) => {
-    let user = usuarios.filter((user) => {
-        return user.nombre == req.params.nombre
-    })[0]
+    let user = usuarios.find(user => user.nombre.toLowerCase() == req.params.nombre.toLowerCase())
     res.send(`
         ${html}
             <form action="/usuarios/${user.nombre}?_method=PUT" method="post">
