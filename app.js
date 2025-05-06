@@ -61,6 +61,9 @@ app.post('/usuarios', (req, res) => {
 app.route('/usuarios/:nombre')
     .get((req, res) => {
     let user = usuarios.find(user => user.nombre.toLowerCase() == req.params.nombre.toLowerCase())
+    if(user == null){
+        res.status(404).json({mensaje: 'Usuario no encontrado'})
+    }
     res.send(`
         ${html}
             <form action="/usuarios/${user.nombre}?_method=PUT" method="post">
